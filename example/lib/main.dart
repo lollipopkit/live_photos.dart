@@ -32,7 +32,8 @@ class _MyAppState extends State<MyApp> {
             ElevatedButton(
               child: Text('Select local video'),
               onPressed: () async {
-                final pickedFile = await picker.getVideo(source: ImageSource.gallery);
+                final pickedFile =
+                    await picker.pickVideo(source: ImageSource.gallery);
                 if (pickedFile != null) {
                   setState(() {
                     videoFile = pickedFile.path;
@@ -57,7 +58,8 @@ class GenFromURLButton extends StatelessWidget {
       child: Text('generate from url'),
       onPressed: () {
         LivePhotos.generate(
-          videoURL: "https://img.gifmagazine.net/gifmagazine/images/3870471/original.mp4",
+          videoURL:
+              "https://img.gifmagazine.net/gifmagazine/images/3870471/original.mp4",
         ).then(
           (value) {
             if (value) {
@@ -69,7 +71,8 @@ class GenFromURLButton extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    content: Text('You can set the downloaded gif in [Settings] > [Wallpaper].'),
+                    content: Text(
+                        'You can set the downloaded gif in [Settings] > [Wallpaper].'),
                     actions: <Widget>[
                       TextButton(
                         child: Text('Cancel'),
@@ -87,9 +90,9 @@ class GenFromURLButton extends StatelessWidget {
               print("Failed");
             }
           },
-        ).catchError(
-          (e) => print(e),
-        );
+        ).catchError((e) {
+          print(e);
+        });
       },
     );
   }
@@ -121,7 +124,8 @@ class GenFromLocalPathButton extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    content: Text('You can set the downloaded gif in [Settings] > [Wallpaper].'),
+                    content: Text(
+                        'You can set the downloaded gif in [Settings] > [Wallpaper].'),
                     actions: <Widget>[
                       TextButton(
                         child: Text('Cancel'),
@@ -139,9 +143,9 @@ class GenFromLocalPathButton extends StatelessWidget {
               print("Failed");
             }
           },
-        ).catchError(
-          (e) => print(e),
-        );
+        ).catchError((e) {
+          print(e);
+        });
       },
     );
   }
