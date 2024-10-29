@@ -56,43 +56,38 @@ class GenFromURLButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       child: Text('generate from url'),
-      onPressed: () {
-        LivePhotos.generate(
-          videoURL:
-              "https://img.gifmagazine.net/gifmagazine/images/3870471/original.mp4",
-        ).then(
-          (value) {
-            if (value) {
-              print("Success");
-              showDialog(
-                context: context,
-                builder: (BuildContext ctx) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    content: Text(
-                        'You can set the downloaded gif in [Settings] > [Wallpaper].'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text('Cancel'),
-                        onPressed: () => Navigator.pop(ctx),
-                      ),
-                      TextButton(
-                        child: Text('Open'),
-                        onPressed: () => LivePhotos.openSettings(),
-                      )
-                    ],
-                  );
-                },
+      onPressed: () async {
+        const url =
+            "https://img.gifmagazine.net/gifmagazine/images/3870471/original.mp4";
+        final value = await LivePhotos.generate(url);
+        if (value) {
+          print("Success");
+          showDialog(
+            context: context,
+            builder: (BuildContext ctx) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                content: Text(
+                  'You can set the downloaded gif in [Settings] > [Wallpaper].',
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('Cancel'),
+                    onPressed: () => Navigator.pop(ctx),
+                  ),
+                  TextButton(
+                    child: Text('Open'),
+                    onPressed: () => LivePhotos.openSettings(),
+                  )
+                ],
               );
-            } else {
-              print("Failed");
-            }
-          },
-        ).catchError((e) {
-          print(e);
-        });
+            },
+          );
+        } else {
+          print("Failed");
+        }
       },
     );
   }
@@ -107,45 +102,37 @@ class GenFromLocalPathButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       child: Text('generate from local path'),
-      onPressed: () {
-        if (path == '') {
-          return;
-        }
-        LivePhotos.generate(
-          localPath: path,
-        ).then(
-          (value) {
-            if (value) {
-              print("Success");
-              showDialog(
-                context: context,
-                builder: (BuildContext ctx) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    content: Text(
-                        'You can set the downloaded gif in [Settings] > [Wallpaper].'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text('Cancel'),
-                        onPressed: () => Navigator.pop(ctx),
-                      ),
-                      TextButton(
-                        child: Text('Open'),
-                        onPressed: () => LivePhotos.openSettings(),
-                      )
-                    ],
-                  );
-                },
+      onPressed: () async {
+        if (path == '') return;
+        final value = await LivePhotos.generate(path);
+        if (value) {
+          print("Success");
+          showDialog(
+            context: context,
+            builder: (BuildContext ctx) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                content: Text(
+                  'You can set the downloaded gif in [Settings] > [Wallpaper].',
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('Cancel'),
+                    onPressed: () => Navigator.pop(ctx),
+                  ),
+                  TextButton(
+                    child: Text('Open'),
+                    onPressed: () => LivePhotos.openSettings(),
+                  )
+                ],
               );
-            } else {
-              print("Failed");
-            }
-          },
-        ).catchError((e) {
-          print(e);
-        });
+            },
+          );
+        } else {
+          print("Failed");
+        }
       },
     );
   }

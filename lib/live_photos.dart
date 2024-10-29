@@ -2,39 +2,29 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-class LivePhotos {
+part 'impl.dart';
+
+/// The main class of this library.
+abstract final class LivePhotos {
+  /// Method Channel for the native code.
   static const MethodChannel _channel = const MethodChannel('live_photos');
 
-  static Future<bool> generate({
-    String? videoURL,
-    String? localPath,
-  }) async {
-    assert(videoURL != null || localPath != null,
-        'Either videoURL or localPath must be set.');
-    assert(videoURL == null || localPath == null,
-        'Either videoURL or localPath is only configurable.');
-    if (videoURL != null) {
-      final bool status = await _channel.invokeMethod(
-        'generateFromURL',
-        <String, dynamic>{
-          "videoURL": videoURL,
-        },
-      );
-      return status;
-    } else {
-      if (localPath != null) {
-        final bool status = await _channel.invokeMethod(
-          'generateFromLocalPath',
-          <String, dynamic>{
-            "localPath": localPath,
-          },
-        );
-        return status;
-      }
+  /// Only accept urls that start with `http://` or `https://`.
+  static final _urlReg = RegExp(r'^https?://');
+
+  /// Generates a live photo from a http(s) url or path.
+  /// eg.: `https://example.com/video.mp4` or `/path/to/video.mp4`
+  static Future<bool> generate(String url) {
+    final isFilePath = url.startsWith('/');
+    if (isFilePath) {
+      return _generateFromLocalPath(url);
+    } else if (url.startsWith(_urlReg)) {
+      return _generateFromUrl(url);
     }
-    return false;
+    return Future.value(false);
   }
 
+  /// Opens the settings of the app.
   static Future<bool> openSettings() async {
     final bool status = await _channel.invokeMethod('openSettings');
     return status;
